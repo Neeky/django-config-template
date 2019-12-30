@@ -25,7 +25,7 @@ SECRET_KEY = 'jt2!s-7m#i(6y7d2@e-b1v(o1h3w&7=7=9fdfe&2xs$-=m)0zq'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -54,7 +54,7 @@ ROOT_URLCONF = 'djiangconfigtemplate.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -73,10 +73,35 @@ WSGI_APPLICATION = 'djiangconfigtemplate.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+# 使用 MySQL 的情况下可以用这个
+# DATABASES = {
+#    'default': {
+#        # 后台使用 MySQL 数据库
+#        'ENGINE': 'django.db.backends.mysql',
+#        # database 名
+#        'NAME': 'leorg',
+#        # 主机、端口、用户名、密码
+#        'HOST': '127.0.0.1',
+#        'PORT': 3306,
+#        'USER': 'tuser',
+#        'PASSWORD': 'euler'
+#    }
+# }
+
+# 使用 sqlite3
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+
+# 使用基于文件系统的缓存
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/tmp/django-caches',
+        'TIMEOUT': 3600,
     }
 }
 
@@ -103,9 +128,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -118,3 +143,49 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
+
+# 日志级别
+LOG_LEVEL = 'DEBUG' if DEBUG == True else 'INFO'
+
+# 日志配置
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '{asctime} - {levelname} - {name} - {lineno} line - {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': LOG_LEVEL,
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': '/tmp/django-apps.log',
+            'formatter': 'simple',
+            'maxBytes': 1024 * 1024 * 10,  # 10M
+            'backupCount': 8
+        },
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console' if DEBUG == True else 'file'],
+            'level': 'INFO',
+            # 'propagate': True,
+        },
+        'apps': {
+            'handlers': ['file'],
+            'level': LOG_LEVEL,
+            # 'propagate': True,
+        }
+    },
+}
