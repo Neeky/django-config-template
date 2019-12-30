@@ -153,3 +153,16 @@
    
    ```
    ---
+
+
+# webpack
+
+## webpack安装
+```bash
+npm install --save-dev webpack webpack-cli webpack-dev-server
+npm install --save-dev babel-loader @babel/core @babel/preset-env style-loader css-loader vue-loader vue-template-compiler
+npm install --save-dev html-webpack-plugin clean-webpack-plugin 
+
+npm install --save vue
+npm install axios
+```
