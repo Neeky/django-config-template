@@ -6,7 +6,8 @@ const VueLoader = require('vue-loader/lib/plugin');
 
 
 module.exports = {
-    mode: 'development',
+    //mode: 'development',
+    mode: 'production',
     devtool: 'inline-source-map',
     entry: {
         main: './src/main.js',
@@ -34,6 +35,10 @@ module.exports = {
                         presets: ['@babel/preset-env']
                     }
                 }
+            },
+            {
+                test: /(\.ttf$|\.woff$)/,
+                use: ['file-loader']
             }
         ]
     },
@@ -43,5 +48,10 @@ module.exports = {
             title: 'html-webpack-plugin-test'
         }),
         new VueLoader()
-    ]
+    ],
+    optimization: {
+        splitChunks: {
+            chunks: 'all',
+        },
+    },
 }

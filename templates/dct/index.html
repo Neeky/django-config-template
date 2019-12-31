@@ -1,5 +1,5 @@
-{% load static %}
 <!DOCTYPE html>
+{% load static %}
 <html>
 
 <head>
@@ -7,14 +7,15 @@
 </head>
 
 <body>
-    <h1>jango-config-template</h1>
 
-
-    <!-- 下面的内容是动态生成的-->
     <div id="app">
 
     </div>
+
+    <script type="text/javascript" src="{% static 'vendors~main-bundle.js' %}"></script>
     <script src="{% static 'main-bundle.js' %}"></script>
+
+
 </body>
 
 </html>
